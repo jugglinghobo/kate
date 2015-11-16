@@ -1,0 +1,5 @@
+= kate
+
+Generate this with
+    kate rdoc
+After you have described your command line interface

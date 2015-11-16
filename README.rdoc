@@ -1,0 +1,6 @@
+= kate
+
+Describe your project here
+
+:include:kate.rdoc
+
