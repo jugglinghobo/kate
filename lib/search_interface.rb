@@ -2,7 +2,6 @@ module Kate
   class SearchInterface
     include UserInterface
 
-
     attr_accessor :search, :results
 
     def initialize(search)
@@ -38,7 +37,7 @@ module Kate
     end
 
     def actions
-      [Actions::Save, Actions::Download]
+      [Actions::Save.new(results), Actions::Download.new(results)]
     end
 
     def table
@@ -67,10 +66,6 @@ module Kate
 
     def initialize(args = {})
       ATTRIBUTES.each { |attr| self.send("#{attr}=", args.fetch(attr)) }
-    end
-
-    def to_row
-      []
     end
 
     def to_s

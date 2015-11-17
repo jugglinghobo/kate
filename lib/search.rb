@@ -3,8 +3,6 @@ require 'kat'
 module Kate
   class Search
 
-    include Kate::UserInterface::Actions
-
     attr_accessor :interest, :category, :results
 
     def initialize(interest, options)

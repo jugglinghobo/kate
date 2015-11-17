@@ -9,7 +9,7 @@ module Kate
       loop do
         print_table
         input = prompt
-        Actions.perform(input)
+        perform_action(input)
       end
     end
 
@@ -33,12 +33,22 @@ module Kate
       STDIN.gets.chomp
     end
 
+    def perform_action(input)
+      identifier, args = input.split " "
+      action = available_actions.find { |action| action.identifier == identifier }
+      if action
+        action.perform(args)
+      else
+        print_table
+      end
+    end
+
     def available_actions
       actions | default_actions
     end
 
     def default_actions
-      [Actions::Exit]
+      [Actions::Exit.new]
     end
   end
 
