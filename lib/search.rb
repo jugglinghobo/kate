@@ -3,7 +3,8 @@ require 'kat'
 module Kate
   class Search
 
-    include Kate::UserInterfaceMethods
+    include Kate::UserInterface::Components
+    include Kate::UserInterface::Actions
 
     attr_accessor :interest, :category, :results
 
@@ -15,7 +16,6 @@ module Kate
     def perform
       kat = Kat.search interest, :category => category
       kat.search
-      #require 'pry'; binding.pry
       @results = kat.results[0].map { |result| Kate::SearchResult.new(result) }
     end
 
@@ -29,7 +29,10 @@ module Kate
     end
 
     def available_actions
-      {:add => "[a]dd"}
+      [
+        UserInterface::Actions::Save,
+        UserInterface::Actions::Download
+      ]
     end
   end
 
