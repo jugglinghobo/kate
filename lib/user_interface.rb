@@ -1,17 +1,9 @@
 require 'terminal-table'
-require 'user_interface_components'
 require 'user_interface_actions'
 module Kate
-  class UserInterface
 
-    attr_accessor :items, :columns, :table, :actions
-
-    def initialize(items, columns, actions = default_actions)
-      @items = items
-      @columns = columns.sort_by &:index
-      @table = initialize_table
-      @actions = actions | default_actions
-    end
+  # Provides basic user interface functionality.
+  module UserInterface
 
     def run
       loop do
@@ -21,6 +13,14 @@ module Kate
       end
     end
 
+    def table
+      raise NotImplementedError
+    end
+
+    def actions
+      raise NotImplementedError
+    end
+
     private
 
     def print_table
@@ -28,30 +28,13 @@ module Kate
       STDOUT.puts table
     end
 
-    def headings
-      columns.map(&:name).unshift ""
-    end
-
-    def initialize_table
-      @table = Terminal::Table.new(
-        :headings => headings,
-        :rows => item_rows
-      )
-      columns.each do |column|
-        table.align_column column.index, column.alignment
-      end
-      table
-    end
-
-    def item_rows
-      items.each_with_index.map do |item, index|
-        columns.map { |column| item.send(column.method) }.unshift(index)
-      end
-    end
-
     def prompt
-      print "#{actions.map(&:to_s).join(", ")}: "
+      print "#{available_actions.map(&:to_s).join(", ")}: "
       STDIN.gets.chomp
+    end
+
+    def available_actions
+      actions | default_actions
     end
 
     def default_actions
