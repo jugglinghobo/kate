@@ -4,7 +4,7 @@ module Kate
 
   # Provides basic user interface functionality.
   class UserInterface
-    MARK = '*'
+    MARK = '+'
 
     attr_accessor :items
 
@@ -22,7 +22,6 @@ module Kate
       input = prompt
       perform_action(input)
     end
-
 
     def perform_action(input)
       case input
@@ -55,8 +54,8 @@ module Kate
 
     def columns
       [
-        { :name => "*", :attribute => :marked },
-        { :name => "No.", :align => :right },
+        { :name => "", :align => :right },
+        { :name => MARK, :attribute => :marked },
         { :attribute => :title },
         { :attribute => :size, :align => :right },
         { :attribute => :seeds, :align => :right },
