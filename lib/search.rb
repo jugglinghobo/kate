@@ -3,7 +3,7 @@ require 'kat'
 module Kate
   class Search
 
-    attr_accessor :interest, :category, :results
+    attr_accessor :interest, :category
 
     def initialize(interest, options)
       @interest = interest
@@ -13,7 +13,7 @@ module Kate
     def perform
       kat = Kat.search interest, :category => category
       kat.search
-      @results = kat.results[0]
+      kat.results[0]
     end
   end
 

@@ -1,0 +1,87 @@
+#!/usr/bin/env ruby
+require 'gli'
+require 'kate'
+require 'user_interface'
+
+require 'search'
+require 'file_store'
+
+begin # XXX: Remove this begin/rescue before distributing your app
+rescue LoadError
+  STDERR.puts "In development, you need to use `bundle exec bin/kate` to run your app"
+  STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
+  STDERR.puts "Feel free to remove this message from bin/kate now"
+  exit 64
+end
+
+module Kate
+
+  include GLI::App
+  extend self
+
+  program_desc 'Search, Save and Download torrents from KAT'
+
+  version Kate::VERSION
+
+  subcommand_option_handling :normal
+  arguments :strict
+
+  # desc 'Describe some switch here'
+  # switch [:s,:switch]
+
+  # desc 'Describe some flag here'
+  # default_value 'the default'
+  # arg_name 'The name of the argument'
+  # flag [:f,:flagname]
+
+  desc 'search for torrents on KAT'
+  arg_name 'Describe arguments to search here'
+  command :search do |c|
+    c.desc 'specify a cateogory'
+    c.default_value 'music'
+    c.flag [:c, :category]
+    c.action do |global_options,options,args|
+      raise "Please enter a search string" if args.empty?
+      interest = args.join " "
+
+      results = Search.new(interest, options).perform
+      UserInterface.new(results).run
+    end
+  end
+
+  desc 'list your saved results'
+  arg_name 'Describe args for list here'
+  command :list do |c|
+    c.desc 'list only a certain category'
+    c.default_value ''
+    c.flag [:c, :category]
+    c.action do |global_options, options, args|
+      items = FileStore.load
+      UserInterface.new(items).run
+    end
+  end
+
+  pre do |global,command,options,args|
+    # Pre logic here
+    # Return true to proceed; false to abort and not call the
+    # chosen command
+    # Use skips_pre before a command to skip this block
+    # on that command only
+    true
+  end
+
+  post do |global,command,options,args|
+    # Post logic here
+    # Use skips_post before a command to skip this
+    # block on that command only
+  end
+
+  on_error do |exception|
+    # Error logic here
+    # return false to skip default error handling
+    raise exception
+    true
+  end
+
+end
+Kate.run(ARGV)
