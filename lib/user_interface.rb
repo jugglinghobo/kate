@@ -1,5 +1,5 @@
 require 'terminal-table'
-require 'kate_downloader'
+require_relative 'kate_downloader'
 module Kate
 
   # Provides basic user interface functionality.

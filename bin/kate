@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 require 'gli'
-require 'kate'
-require 'user_interface'
+require_relative '../lib/kate'
+require_relative '../lib/user_interface'
 
-require 'search'
-require 'file_store'
+require_relative '../lib/search'
+require_relative '../lib/file_store'
 
 begin # XXX: Remove this begin/rescue before distributing your app
 rescue LoadError
